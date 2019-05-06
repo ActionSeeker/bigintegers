@@ -1,0 +1,27 @@
+{
+  "name": "bigintegers",
+  "version": "1.0.0",
+  "description": "A small custom package to perform wonders with big integers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ActionSeeker/bigintegers.git"
+  },
+  "keywords": [
+    "big",
+    "bigintegers",
+    "maths",
+    "mathematics",
+    "numbers",
+    "bignumbers"
+  ],
+  "author": "Luv Karakoti",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ActionSeeker/bigintegers/issues"
+  },
+  "homepage": "https://github.com/ActionSeeker/bigintegers#readme"
+}
