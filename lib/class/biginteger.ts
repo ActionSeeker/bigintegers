@@ -4,12 +4,22 @@ export class BigInteger {
     private integer: string = '0';
     private sign: string = '+';
     static readonly ZERO: string = '0';
+    private numberList: Array<number> = [];
 
     constructor(number: string) {
         if (this.REGEX.test(number)) {
             this.integer = number;
         }
         this.integer = this.sanitize(this.integer);
+        this.numberList = this.getNumberList(this.integer);
+    }
+
+    private getNumberList(zahlen: string): number[] {
+        const nummer: number[] = [];
+        zahlen.split('').forEach((zahl: string) => {
+            nummer.push(parseInt(zahl));
+        })
+        return nummer;
     }
 
     private sanitize(number: string): string {
