@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var sum_1 = require("./operations/sum");
+var compare_1 = require("./operations/compare");
 var BigInteger = /** @class */ (function () {
     /**
      * Constructor
@@ -13,13 +15,19 @@ var BigInteger = /** @class */ (function () {
          */
         this.REGEX = /(^[-|+]?[0-9]+$)/gm;
         this._signPresent = false;
+        /**
+         * Constants from other class that have zero arguments
+         * These are essentially operation arguments
+         */
+        this._bigSum = new sum_1.BigIntegerSum();
+        this._bigCompare = new compare_1.BigIntegerCompare();
         if (!this.REGEX.test(number)) {
             throw new Error('ParseException: The nominated candidate does not suit the rules for being an integer');
         }
         this._sign = this.getSignumFrom(number);
         this._signPresent = this.lookAheadSign(number);
         this._integer = this.getSanitizedForm(number);
-        this._zahlen = this.getZahlen(number);
+        this._zahlen = this.getZahlen();
     }
     /**
      * Method to look ahead if there's any symbol present in the
@@ -57,13 +65,40 @@ var BigInteger = /** @class */ (function () {
     };
     /**
      * Method to get a list of numbers from a BigInteger
-     * @param number The qualified nominee for bigInteger
      */
-    BigInteger.prototype.getZahlen = function (number) {
-        if (number === BigInteger.NULL)
+    BigInteger.prototype.getZahlen = function () {
+        if (this._integer === BigInteger.NULL)
             return [];
         var idx = this._signPresent ? 1 : 0;
-        return number.substr(idx).split('').map(function (zahl) { return parseInt(zahl); });
+        return this._integer.substr(idx).split('').map(function (zahl) { return parseInt(zahl); });
+    };
+    /**
+     * Method to add two big integers
+     * @param addendum Another bigInteger
+     */
+    BigInteger.prototype.add = function (addendum) {
+        return this._bigSum.add(this, addendum);
+    };
+    BigInteger.prototype.compare = function (compareTerm) {
+        return this._bigCompare.compare(this, compareTerm);
+    };
+    /**
+     * Method to return if the BigInteger is ZERO or not
+     */
+    BigInteger.prototype.isZero = function () {
+        return this._integer === BigInteger.ZERO;
+    };
+    /**
+     * Method to return if the BigInteger is ONE or not
+     */
+    BigInteger.prototype.isUnity = function () {
+        return this._integer === BigInteger.ONE;
+    };
+    /**
+     * Method to return if the BigInteger is NULL or not
+     */
+    BigInteger.prototype.isNull = function () {
+        return this._integer === BigInteger.NULL;
     };
     Object.defineProperty(BigInteger.prototype, "sign", {
         /**
@@ -82,6 +117,13 @@ var BigInteger = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(BigInteger.prototype, "zahlen", {
+        get: function () {
+            return this._zahlen;
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * Static variables - these do not need the class to be initialized to be accessed
      * NULL : sentinel value. If nothing is provided, a BigInteger is this
@@ -89,6 +131,7 @@ var BigInteger = /** @class */ (function () {
      */
     BigInteger.NULL = '';
     BigInteger.ZERO = '0';
+    BigInteger.ONE = '1';
     return BigInteger;
 }());
 exports.BigInteger = BigInteger;

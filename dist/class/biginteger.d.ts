@@ -5,7 +5,8 @@ export declare class BigInteger {
      * ZERO : The zero of integers. A zero and null are not the same values
      */
     private static readonly NULL;
-    static readonly ZERO: string;
+    private static readonly ZERO;
+    private static readonly ONE;
     /**
      * Constants - These are constants which are used for sanity purposes
      * These are intended to be internal for now as we do not wish these to be publically available
@@ -20,6 +21,12 @@ export declare class BigInteger {
     private _signPresent;
     private _integer;
     private _zahlen;
+    /**
+     * Constants from other class that have zero arguments
+     * These are essentially operation arguments
+     */
+    private _bigSum;
+    private _bigCompare;
     /**
      * Constructor
      * @param number The number as the nominee as the bigInteger
@@ -42,14 +49,32 @@ export declare class BigInteger {
     private getSanitizedForm;
     /**
      * Method to get a list of numbers from a BigInteger
-     * @param number The qualified nominee for bigInteger
      */
     private getZahlen;
+    /**
+     * Method to add two big integers
+     * @param addendum Another bigInteger
+     */
+    add(addendum: BigInteger): BigInteger;
+    compare(compareTerm: BigInteger): number;
+    /**
+     * Method to return if the BigInteger is ZERO or not
+     */
+    isZero(): boolean;
+    /**
+     * Method to return if the BigInteger is ONE or not
+     */
+    isUnity(): boolean;
+    /**
+     * Method to return if the BigInteger is NULL or not
+     */
+    isNull(): boolean;
     /**
      * Accessor methods
      */
     readonly sign: LocalEnums.Signs;
     readonly integer: String;
+    readonly zahlen: Array<number>;
 }
 export declare namespace LocalEnums {
     /**

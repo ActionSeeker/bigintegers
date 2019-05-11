@@ -12,6 +12,7 @@ describe('BigInteger class tests', () => {
         bigInteger = new BigInteger(REGULAR_BIG_INT);
         expect(bigInteger.integer).to.equal(REGULAR_BIG_INT);
         expect(bigInteger.sign).to.equal(PLUS);
+        expect(bigInteger.zahlen.length).to.equal(26);
     });
 
     it('Should parse a negative integer value correct', () => {
@@ -40,6 +41,14 @@ describe('BigInteger class tests', () => {
         bigInteger = new BigInteger(ZERO);
         expect(bigInteger.integer).to.equal(BigInteger.ZERO);
         expect(bigInteger.sign).to.equal(PLUS);
+    })
+
+    it('Should ignore preceding zeroes in positive number', () => {
+        const EIGHT = '0008';
+        bigInteger = new BigInteger(EIGHT);
+        expect(bigInteger.integer).to.equal('8');
+        expect(bigInteger.sign).to.equal(PLUS);
+        expect(bigInteger.zahlen).to.deep.equal([8]);
     })
 
     it('Should throw ParseException when an illegal format is sent', () => {

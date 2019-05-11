@@ -1,3 +1,6 @@
+import { BigIntegerSum } from "./operations/sum";
+import { BigIntegerCompare } from "./operations/compare";
+
 export class BigInteger {
 
     /**
@@ -6,7 +9,8 @@ export class BigInteger {
      * ZERO : The zero of integers. A zero and null are not the same values
      */
     private static readonly NULL: string = '';
-    public static readonly ZERO: string = '0';
+    private static readonly ZERO: string = '0';
+    private static readonly ONE: string = '1';
 
     /**
      * Constants - These are constants which are used for sanity purposes
@@ -25,6 +29,13 @@ export class BigInteger {
     private _zahlen: Array<number>;
 
     /**
+     * Constants from other class that have zero arguments
+     * These are essentially operation arguments
+     */
+    private _bigSum: BigIntegerSum = new BigIntegerSum();
+    private _bigCompare: BigIntegerCompare = new BigIntegerCompare();
+
+    /**
      * Constructor
      * @param number The number as the nominee as the bigInteger
      */
@@ -35,7 +46,7 @@ export class BigInteger {
         this._sign = this.getSignumFrom(number);
         this._signPresent = this.lookAheadSign(number);
         this._integer = this.getSanitizedForm(number);
-        this._zahlen = this.getZahlen(number);
+        this._zahlen = this.getZahlen();
     }
 
     /**
@@ -75,12 +86,44 @@ export class BigInteger {
 
     /**
      * Method to get a list of numbers from a BigInteger
-     * @param number The qualified nominee for bigInteger
      */
-    private getZahlen(number: string): number[] {
-        if (number === BigInteger.NULL) return [];
+    private getZahlen(): number[] {
+        if (this._integer === BigInteger.NULL) return [];
         let idx = this._signPresent ? 1 : 0;
-        return number.substr(idx).split('').map((zahl: string) => parseInt(zahl));
+        return this._integer.substr(idx).split('').map((zahl: string) => parseInt(zahl));
+    }
+
+    /**
+     * Method to add two big integers
+     * @param addendum Another bigInteger
+     */
+    public add(addendum: BigInteger): BigInteger {
+        return this._bigSum.add(this, addendum);
+    }
+
+    public compare(compareTerm: BigInteger): number {
+        return this._bigCompare.compare(this, compareTerm);
+    }
+
+    /**
+     * Method to return if the BigInteger is ZERO or not
+     */
+    public isZero(): boolean {
+        return this._integer === BigInteger.ZERO;
+    }
+
+    /**
+     * Method to return if the BigInteger is ONE or not
+     */
+    public isUnity(): boolean {
+        return this._integer === BigInteger.ONE;
+    }
+
+    /**
+     * Method to return if the BigInteger is NULL or not
+     */
+    public isNull(): boolean {
+        return this._integer === BigInteger.NULL;
     }
 
     /**
@@ -92,6 +135,10 @@ export class BigInteger {
 
     public get integer(): String {
         return this._integer;
+    }
+
+    public get zahlen(): Array<number> {
+        return this._zahlen;
     }
 }
 
