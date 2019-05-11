@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --reporter spec test/**/*.test.js"
+    "test": "mocha --reporter spec test/**/*.test.js",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha test/**/*.test.js -- -R spec"
   },
   "repository": {
     "type": "git",
