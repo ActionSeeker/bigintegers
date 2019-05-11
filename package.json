@@ -1,6 +1,6 @@
 {
   "name": "bigintegers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small custom package to perform wonders with big integers",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -28,6 +28,8 @@
   "homepage": "https://github.com/ActionSeeker/bigintegers#readme",
   "devDependencies": {
     "chai": "^4.2.0",
+    "coveralls": "^3.0.3",
+    "istanbul": "^0.4.5",
     "mocha": "^6.1.4",
     "typescript": "^3.4.5"
   }
