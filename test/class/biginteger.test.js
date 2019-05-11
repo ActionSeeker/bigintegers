@@ -41,4 +41,13 @@ describe('BigInteger class tests', () => {
         expect(bigInteger.integer).to.equal(BigInteger.ZERO);
         expect(bigInteger.sign).to.equal(PLUS);
     })
+
+    it('Should throw ParseException when an illegal format is sent', () => {
+        const ILLEGAL_BIG_INT = '-12^&*$&*13';
+        try {
+            bigInteger = new BigInteger(ILLEGAL_BIG_INT);
+        } catch (error) {
+            expect(error.message).to.equal('ParseException: The nominated candidate does not suit the rules for being an integer');
+        }
+    })
 });
