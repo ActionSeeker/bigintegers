@@ -15,7 +15,6 @@ var BigInteger = /** @class */ (function () {
          * And these are unmodifiable and thereby prefixed readonly
          */
         this.REGEX = /(^[-|+]?[0-9]+$)/gm;
-        this.CHUNK_SIZE = 4;
         this._signPresent = false;
         if (!this.REGEX.test(number)) {
             throw new Error('ParseException: The nominated candidate does not suit the rules for being an integer');
@@ -80,11 +79,11 @@ var BigInteger = /** @class */ (function () {
         var idx = this._signPresent ? 1 : 0;
         var zahlen = this._integer.substr(idx);
         // On the cleaned list
-        var size = Math.ceil(zahlen.length / this.CHUNK_SIZE);
+        var size = Math.ceil(zahlen.length / BigInteger.CHUNK_SIZE);
         var chunked = new Array(size);
         var offset = zahlen.length;
-        for (var idx_1 = 0; idx_1 < size; idx_1++, offset = offset - this.CHUNK_SIZE) {
-            var startLt = offset - this.CHUNK_SIZE > 0 ? offset - this.CHUNK_SIZE : 0;
+        for (var idx_1 = 0; idx_1 < size; idx_1++, offset = offset - BigInteger.CHUNK_SIZE) {
+            var startLt = offset - BigInteger.CHUNK_SIZE > 0 ? offset - BigInteger.CHUNK_SIZE : 0;
             chunked[idx_1] = parseInt(zahlen.substring(startLt, offset));
         }
         return chunked;
@@ -177,6 +176,8 @@ var BigInteger = /** @class */ (function () {
     BigInteger.NULL = '';
     BigInteger.ZERO = '0';
     BigInteger.ONE = '1';
+    BigInteger.BASAL = 10000; // 10 ** 4
+    BigInteger.CHUNK_SIZE = 4;
     return BigInteger;
 }());
 exports.BigInteger = BigInteger;

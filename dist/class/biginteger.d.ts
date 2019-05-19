@@ -8,13 +8,14 @@ export declare class BigInteger {
     private static readonly NULL;
     private static readonly ZERO;
     private static readonly ONE;
+    static readonly BASAL: number;
+    static readonly CHUNK_SIZE: number;
     /**
      * Constants - These are constants which are used for sanity purposes
      * These are intended to be internal for now as we do not wish these to be publically available
      * And these are unmodifiable and thereby prefixed readonly
      */
     private readonly REGEX;
-    private readonly CHUNK_SIZE;
     /**
      * The private variables - These are mutables, and properties of the class
      * These are most probably to be changed within a constructor or by other methods

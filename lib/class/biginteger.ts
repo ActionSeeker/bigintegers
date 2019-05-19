@@ -13,6 +13,9 @@ export class BigInteger {
     private static readonly NULL: string = '';
     private static readonly ZERO: string = '0';
     private static readonly ONE: string = '1';
+    public static readonly BASAL: number = 10000; // 10 ** 4
+    public static readonly CHUNK_SIZE: number = 4;
+
 
     /**
      * Constants - These are constants which are used for sanity purposes
@@ -20,7 +23,6 @@ export class BigInteger {
      * And these are unmodifiable and thereby prefixed readonly
      */
     private readonly REGEX: RegExp = /(^[-|+]?[0-9]+$)/gm;
-    private readonly CHUNK_SIZE: number = 4;
 
     /**
      * The private variables - These are mutables, and properties of the class
@@ -101,11 +103,11 @@ export class BigInteger {
         let idx = this._signPresent ? 1 : 0;
         const zahlen = this._integer.substr(idx);
         // On the cleaned list
-        const size = Math.ceil(zahlen.length / this.CHUNK_SIZE);
+        const size = Math.ceil(zahlen.length / BigInteger.CHUNK_SIZE);
         const chunked = new Array(size);
         let offset = zahlen.length;
-        for (let idx = 0; idx < size; idx++ , offset = offset - this.CHUNK_SIZE) {
-            const startLt = offset - this.CHUNK_SIZE > 0 ? offset - this.CHUNK_SIZE : 0;
+        for (let idx = 0; idx < size; idx++ , offset = offset - BigInteger.CHUNK_SIZE) {
+            const startLt = offset - BigInteger.CHUNK_SIZE > 0 ? offset - BigInteger.CHUNK_SIZE : 0;
             chunked[idx] = parseInt(zahlen.substring(startLt, offset));
         }
         return chunked;
