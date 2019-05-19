@@ -79,6 +79,13 @@ var BigInteger = /** @class */ (function () {
     BigInteger.prototype.add = function (addendum) {
         return new switch_1.Switch(this, addendum, 'ADD').router();
     };
+    /**
+     * Method to add two big integers
+     * @param addendum Another bigInteger
+     */
+    BigInteger.prototype.minus = function (addendum) {
+        return new switch_1.Switch(this, addendum, 'MINUS').router();
+    };
     BigInteger.prototype.compare = function (compareTerm) {
         return this._bigCompare.compare(this, compareTerm);
     };
@@ -105,6 +112,14 @@ var BigInteger = /** @class */ (function () {
      */
     BigInteger.prototype.isNull = function () {
         return this._integer === BigInteger.NULL;
+    };
+    BigInteger.prototype.negate = function () {
+        if (this._sign === signs_1.Signs.MINUS)
+            return this.getAbsoluteInteger();
+        return new BigInteger("-" + this.zahlen.join(''));
+    };
+    BigInteger.prototype.toString = function () {
+        return "" + (this._signPresent ? this._sign : '') + this.zahlen.join('');
     };
     Object.defineProperty(BigInteger.prototype, "sign", {
         /**

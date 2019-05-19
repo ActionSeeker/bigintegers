@@ -56,6 +56,11 @@ export declare class BigInteger {
      * @param addendum Another bigInteger
      */
     add(addendum: BigInteger): BigInteger;
+    /**
+     * Method to add two big integers
+     * @param addendum Another bigInteger
+     */
+    minus(addendum: BigInteger): BigInteger;
     compare(compareTerm: BigInteger): number;
     getAbsoluteInteger(): BigInteger;
     /**
@@ -70,6 +75,8 @@ export declare class BigInteger {
      * Method to return if the BigInteger is NULL or not
      */
     isNull(): boolean;
+    negate(): BigInteger;
+    toString(): String;
     /**
      * Accessor methods
      */

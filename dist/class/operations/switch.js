@@ -42,11 +42,11 @@ var Switch = /** @class */ (function () {
         if (this._case === 1)
             return sum_1.BigIntegerSum.add(this._a, this._b);
         if (this._case === 2)
-            return sum_1.BigIntegerSum.add(this._a, this._b); // Multiply this with -1
+            return sum_1.BigIntegerSum.add(this._a, this._b).negate(); // Multiply this with -1
         if (this._case === 3)
             return difference_1.BigIntegerDifference.minus(this._a, this._b);
         if (this._case === 4)
-            return difference_1.BigIntegerDifference.minus(this._b, this._a); // Multiply this with -1
+            return difference_1.BigIntegerDifference.minus(this._b, this._a).negate(); // Multiply this with -1
         return new biginteger_1.BigInteger('');
     };
     return Switch;

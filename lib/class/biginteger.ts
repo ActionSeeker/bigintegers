@@ -102,6 +102,14 @@ export class BigInteger {
         return new Switch(this, addendum, 'ADD').router();
     }
 
+    /**
+     * Method to add two big integers
+     * @param addendum Another bigInteger
+     */
+    public minus(addendum: BigInteger): BigInteger {
+        return new Switch(this, addendum, 'MINUS').router();
+    }
+
     public compare(compareTerm: BigInteger): number {
         return this._bigCompare.compare(this, compareTerm);
     }
@@ -131,6 +139,15 @@ export class BigInteger {
      */
     public isNull(): boolean {
         return this._integer === BigInteger.NULL;
+    }
+
+    public negate(): BigInteger {
+        if (this._sign === Signs.MINUS) return this.getAbsoluteInteger();
+        return new BigInteger(`-${this.zahlen.join('')}`);
+    }
+
+    public toString(): String {
+        return `${this._signPresent ? this._sign : ''}${this.zahlen.join('')}`
     }
 
     /**
