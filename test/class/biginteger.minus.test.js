@@ -23,10 +23,17 @@ describe('BigInteger subtraction tests', () => {
         expect(result.toString()).to.equal('-600581546630651293000691244108451019106');
     });
 
-    it('Should subtract a>0 and b>0 and a < b as a - b where a, b are absolute values', () => {
+    it('Should subtract a>0 and b>0 and a > b as a - b where a, b are absolute values', () => {
         const ersteNummer = new BigInteger('9239858270000237586723875');
         const zweiteNummer = new BigInteger('1288958278578237586723875');
         const result = ersteNummer.minus(zweiteNummer);
         expect(result.toString()).to.equal('7950899991422000000000000');
+    });
+
+    it('Should subtract a<0 and b<0 as -a + b where a, b are absolute values', () => {
+        const ersteNummer = new BigInteger('-9239858270000237586723875');
+        const zweiteNummer = new BigInteger('-1288958278578237586723875');
+        const result = ersteNummer.minus(zweiteNummer);
+        expect(result.toString()).to.equal('-7950899991422000000000000');
     });
 });

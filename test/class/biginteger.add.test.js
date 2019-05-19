@@ -15,4 +15,18 @@ describe('BigInteger addition tests', () => {
         const result = ersteNummer.add(zweiteNummer);
         expect(result.toString()).to.equal('-58078289388063930783076877300016');
     });
+
+    it('Should subtract a>0 and b<0 as a - b where a, b are absolute values', () => {
+        const ersteNummer = new BigInteger('43858328758224931849385');
+        const zweiteNummer = new BigInteger('-32917481738478127481834');
+        const result = ersteNummer.add(zweiteNummer);
+        expect(result.toString()).to.equal('10940847019746804367551');
+    });
+
+    it('Should subtract a<0 and b>0 as -a+b where a, b are absolute values', () => {
+        const ersteNummer = new BigInteger('-71358728937587238959393');
+        const zweiteNummer = new BigInteger('32917481738478127481834');
+        const result = ersteNummer.add(zweiteNummer);
+        expect(result.toString()).to.equal('-38441247199109111477559');
+    });
 });
