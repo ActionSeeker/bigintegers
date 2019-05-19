@@ -4,12 +4,15 @@ export declare class BigInteger {
      * Static variables - these do not need the class to be initialized to be accessed
      * NULL : sentinel value. If nothing is provided, a BigInteger is this
      * ZERO : The zero of integers. A zero and null are not the same values
+     * CHUNKS_SIZE: Maximum exact integral value is 2**51 - 1, aka 9007199254740991
+     * It is safe because we don't use any bitwise sift operators here
+     * If we were to use those, then BASAL changes to 2147483647 aka 2**31 - 1
      */
     private static readonly NULL;
     private static readonly ZERO;
     private static readonly ONE;
-    static readonly BASAL: number;
     static readonly CHUNK_SIZE: number;
+    static readonly BASAL: number;
     /**
      * Constants - These are constants which are used for sanity purposes
      * These are intended to be internal for now as we do not wish these to be publically available

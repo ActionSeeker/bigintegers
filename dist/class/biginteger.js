@@ -172,12 +172,15 @@ var BigInteger = /** @class */ (function () {
      * Static variables - these do not need the class to be initialized to be accessed
      * NULL : sentinel value. If nothing is provided, a BigInteger is this
      * ZERO : The zero of integers. A zero and null are not the same values
+     * CHUNKS_SIZE: Maximum exact integral value is 2**51 - 1, aka 9007199254740991
+     * It is safe because we don't use any bitwise sift operators here
+     * If we were to use those, then BASAL changes to 2147483647 aka 2**31 - 1
      */
     BigInteger.NULL = '';
     BigInteger.ZERO = '0';
     BigInteger.ONE = '1';
-    BigInteger.BASAL = 10000; // 10 ** 4
-    BigInteger.CHUNK_SIZE = 4;
+    BigInteger.CHUNK_SIZE = 15;
+    BigInteger.BASAL = Math.pow(10, 15); // 10^15
     return BigInteger;
 }());
 exports.BigInteger = BigInteger;

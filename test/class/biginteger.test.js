@@ -59,12 +59,4 @@ describe('BigInteger class tests', () => {
             expect(error.message).to.equal('ParseException: The nominated candidate does not suit the rules for being an integer');
         }
     })
-
-    it('Should return the correct chunks', () => {
-        const REALLY_BIG_INT = '-893289578927458939578273857984768938598293859274968943869375968';
-        bigInteger = new BigInteger(REALLY_BIG_INT);
-        expect(bigInteger.chunks).to.deep.equal([
-            893, 2895, 7892, 7458, 9395, 7827, 3857, 9847, 6893, 8598, 2938, 5927, 4968, 9438, 6937, 5968
-        ].reverse());
-    })
 });
