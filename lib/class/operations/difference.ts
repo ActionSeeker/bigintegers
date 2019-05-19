@@ -5,26 +5,22 @@ export class BigIntegerDifference {
 
     public static minus(subtrahend: BigInteger, minuend: BigInteger): BigInteger {
 
-        // Now reverse them
-        let subtrahendNr = subtrahend.zahlen.reverse();
-        let minuendNr = minuend.zahlen.reverse();
-
-        // Now add these numbers
-        let lengthDiff = subtrahend.zahlen.length - minuend.zahlen.length;
-        while (lengthDiff--) { minuendNr.push(CONSTANTS.ZERO) };
-
-        const diff: number[] = [];
-        for (let idx = CONSTANTS.ZERO; idx < subtrahend.zahlen.length; idx++) {
-            if (subtrahendNr[idx] >= minuendNr[idx]) {
-                diff.push(subtrahendNr[idx] - minuendNr[idx]);
+        const subtrChunks = subtrahend.chunks;
+        const minuChunks = minuend.chunks;
+        let chunkDiff = 0;
+        const diffChunks: number[] = subtrChunks.map((_master: number, $idx: number) => {
+            const _minuendLocal = minuChunks[$idx] ? minuChunks[$idx] : 0;
+            chunkDiff = _master - _minuendLocal;
+            if (chunkDiff < 0) {
+                chunkDiff = chunkDiff + BigInteger.BASAL;
+                subtrChunks[$idx + 1] = subtrChunks[$idx + 1] - CONSTANTS.UNITY;
             }
-            else {
-                diff.push(subtrahendNr[idx] - minuendNr[idx] + CONSTANTS.RADIX);
-                subtrahendNr[idx + 1] = (subtrahendNr[idx + 1] - CONSTANTS.UNITY);
-            }
-        }
+            return chunkDiff % BigInteger.BASAL;
+        });
+        return new BigInteger(diffChunks.reverse().map(_number => this.pad(_number)).join(''));
+    }
 
-        return new BigInteger(diff.reverse().join(''));
-
+    private static pad(_number: number): string {
+        return Array(Math.max(BigInteger.CHUNK_SIZE - String(_number).length + 1, 0)).join('0') + _number;
     }
 }

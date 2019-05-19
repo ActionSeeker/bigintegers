@@ -18,20 +18,6 @@ var BigIntegerSum = /** @class */ (function () {
         if (carry != 0)
             sumChunks.push(carry);
         return new biginteger_1.BigInteger(sumChunks.reverse().map(function (_number) { return _this.pad(_number); }).join(''));
-        // // Now reverse them
-        // let admEinNr = addendumEin.zahlen.reverse();
-        // let admZwNr = addendumZwei.zahlen.reverse();
-        // // Now add these numbers
-        // let lengthDiff = addendumEin.zahlen.length - addendumZwei.zahlen.length;
-        // while (lengthDiff--) { admZwNr.push(CONSTANTS.ZERO) };
-        // const sum: number[] = [];
-        // for (let idx = 0; idx < addendumEin.zahlen.length; idx++) {
-        //     // Push this digit
-        //     const actualSum = admEinNr[idx] + admZwNr[idx] + (sum[idx] ? sum[idx] : CONSTANTS.ZERO);
-        //     sum[idx] = actualSum % CONSTANTS.RADIX;
-        //     sum[idx + 1] = Math.floor(actualSum / CONSTANTS.RADIX);
-        // }
-        // return new BigInteger(sum.reverse().join(''));
     };
     BigIntegerSum.pad = function (_number) {
         return Array(Math.max(biginteger_1.BigInteger.CHUNK_SIZE - String(_number).length + 1, 0)).join('0') + _number;
