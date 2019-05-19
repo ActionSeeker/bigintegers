@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var sum_1 = require("./operations/sum");
 var compare_1 = require("./operations/compare");
+var switch_1 = require("./operations/switch");
+var signs_1 = require("./signs");
 var BigInteger = /** @class */ (function () {
     /**
      * Constructor
@@ -19,7 +20,6 @@ var BigInteger = /** @class */ (function () {
          * Constants from other class that have zero arguments
          * These are essentially operation arguments
          */
-        this._bigSum = new sum_1.BigIntegerSum();
         this._bigCompare = new compare_1.BigIntegerCompare();
         if (!this.REGEX.test(number)) {
             throw new Error('ParseException: The nominated candidate does not suit the rules for being an integer');
@@ -34,7 +34,7 @@ var BigInteger = /** @class */ (function () {
      * @param number The qualified candidate for the BigInteger
      */
     BigInteger.prototype.lookAheadSign = function (number) {
-        if (number && (number.charAt(0) === LocalEnums.Signs.PLUS || number.charAt(0) === LocalEnums.Signs.MINUS))
+        if (number && (number.charAt(0) === signs_1.Signs.PLUS || number.charAt(0) === signs_1.Signs.MINUS))
             return true;
         return false;
     };
@@ -44,8 +44,8 @@ var BigInteger = /** @class */ (function () {
      */
     BigInteger.prototype.getSignumFrom = function (candidate) {
         if (!candidate)
-            return LocalEnums.Signs.NULL;
-        return candidate.charAt(0) === LocalEnums.Signs.MINUS ? LocalEnums.Signs.MINUS : LocalEnums.Signs.PLUS;
+            return signs_1.Signs.NULL;
+        return candidate.charAt(0) === signs_1.Signs.MINUS ? signs_1.Signs.MINUS : signs_1.Signs.PLUS;
     };
     /**
      * Method to sanitize the argument and remove all prefixed zeroes
@@ -57,7 +57,7 @@ var BigInteger = /** @class */ (function () {
             idx++;
         return BigInteger.NULL.concat(
         // The symbol probably
-        this._signPresent ? this._sign : LocalEnums.Signs.NULL, 
+        this._signPresent ? this._sign : signs_1.Signs.NULL, 
         // The digits
         number.substr(idx), 
         // What if it is zero
@@ -77,10 +77,16 @@ var BigInteger = /** @class */ (function () {
      * @param addendum Another bigInteger
      */
     BigInteger.prototype.add = function (addendum) {
-        return this._bigSum.add(this, addendum);
+        return new switch_1.Switch(this, addendum, 'ADD').router();
     };
     BigInteger.prototype.compare = function (compareTerm) {
         return this._bigCompare.compare(this, compareTerm);
+    };
+    BigInteger.prototype.getAbsoluteInteger = function () {
+        if (this._integer === BigInteger.NULL)
+            BigInteger.NULL;
+        var idx = this._signPresent ? 1 : 0;
+        return new BigInteger(this._integer.substr(idx));
     };
     /**
      * Method to return if the BigInteger is ZERO or not
@@ -135,15 +141,3 @@ var BigInteger = /** @class */ (function () {
     return BigInteger;
 }());
 exports.BigInteger = BigInteger;
-var LocalEnums;
-(function (LocalEnums) {
-    /**
-     * An enum to capture the possible value  of signs
-     */
-    var Signs;
-    (function (Signs) {
-        Signs["PLUS"] = "+";
-        Signs["MINUS"] = "-";
-        Signs["NULL"] = "";
-    })(Signs = LocalEnums.Signs || (LocalEnums.Signs = {}));
-})(LocalEnums = exports.LocalEnums || (exports.LocalEnums = {}));

@@ -1,5 +1,5 @@
 import { BigInteger } from "../biginteger";
 export declare class BigIntegerSum {
-    add(erste: BigInteger, zweite: BigInteger): BigInteger;
-    private plus;
+    private static readonly ZERO;
+    static add(erste: BigInteger, zweite: BigInteger): BigInteger;
 }

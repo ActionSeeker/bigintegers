@@ -1,4 +1,5 @@
-import { BigInteger, LocalEnums } from "../biginteger";
+import { BigInteger } from "../biginteger";
+import { Signs } from "../signs";
 
 export class BigIntegerCompare {
 
@@ -12,17 +13,17 @@ export class BigIntegerCompare {
      */
     public compare(a: BigInteger, b: BigInteger): number {
         // When a is negative and b is positive
-        if (a.sign === LocalEnums.Signs.MINUS && b.sign === LocalEnums.Signs.PLUS) return -1;
+        if (a.sign === Signs.MINUS && b.sign === Signs.PLUS) return -1;
         // When a is positive and b is negative
-        if (a.sign === LocalEnums.Signs.PLUS && b.sign === LocalEnums.Signs.MINUS) return 1;
+        if (a.sign === Signs.PLUS && b.sign === Signs.MINUS) return 1;
         // Otherwise based on length
         // When both are negative and LEN(a) < LEN (b)
         if (a.zahlen.length !== b.zahlen.length) {
             const comparator = a.zahlen.length > b.zahlen.length ? 1 : -1;
-            if (a.sign === LocalEnums.Signs.MINUS) return -1 * comparator;
+            if (a.sign === Signs.MINUS) return -1 * comparator;
             return comparator;
         }
-        if (a.sign === LocalEnums.Signs.MINUS) return -1 * this.compareCore(a, b);
+        if (a.sign === Signs.MINUS) return -1 * this.compareCore(a, b);
         return 1 * this.compareCore(a, b);
     }
 

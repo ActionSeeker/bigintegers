@@ -1,3 +1,4 @@
+import { Signs } from "./signs";
 export declare class BigInteger {
     /**
      * Static variables - these do not need the class to be initialized to be accessed
@@ -25,7 +26,6 @@ export declare class BigInteger {
      * Constants from other class that have zero arguments
      * These are essentially operation arguments
      */
-    private _bigSum;
     private _bigCompare;
     /**
      * Constructor
@@ -57,6 +57,7 @@ export declare class BigInteger {
      */
     add(addendum: BigInteger): BigInteger;
     compare(compareTerm: BigInteger): number;
+    getAbsoluteInteger(): BigInteger;
     /**
      * Method to return if the BigInteger is ZERO or not
      */
@@ -72,17 +73,7 @@ export declare class BigInteger {
     /**
      * Accessor methods
      */
-    readonly sign: LocalEnums.Signs;
+    readonly sign: Signs;
     readonly integer: String;
     readonly zahlen: Array<number>;
-}
-export declare namespace LocalEnums {
-    /**
-     * An enum to capture the possible value  of signs
-     */
-    enum Signs {
-        PLUS = "+",
-        MINUS = "-",
-        NULL = ""
-    }
 }

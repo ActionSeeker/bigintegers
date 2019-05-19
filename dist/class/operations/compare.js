@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var biginteger_1 = require("../biginteger");
+var signs_1 = require("../signs");
 var BigIntegerCompare = /** @class */ (function () {
     function BigIntegerCompare() {
     }
@@ -14,20 +14,20 @@ var BigIntegerCompare = /** @class */ (function () {
      */
     BigIntegerCompare.prototype.compare = function (a, b) {
         // When a is negative and b is positive
-        if (a.sign === biginteger_1.LocalEnums.Signs.MINUS && b.sign === biginteger_1.LocalEnums.Signs.PLUS)
+        if (a.sign === signs_1.Signs.MINUS && b.sign === signs_1.Signs.PLUS)
             return -1;
         // When a is positive and b is negative
-        if (a.sign === biginteger_1.LocalEnums.Signs.PLUS && b.sign === biginteger_1.LocalEnums.Signs.MINUS)
+        if (a.sign === signs_1.Signs.PLUS && b.sign === signs_1.Signs.MINUS)
             return 1;
         // Otherwise based on length
         // When both are negative and LEN(a) < LEN (b)
         if (a.zahlen.length !== b.zahlen.length) {
             var comparator = a.zahlen.length > b.zahlen.length ? 1 : -1;
-            if (a.sign === biginteger_1.LocalEnums.Signs.MINUS)
+            if (a.sign === signs_1.Signs.MINUS)
                 return -1 * comparator;
             return comparator;
         }
-        if (a.sign === biginteger_1.LocalEnums.Signs.MINUS)
+        if (a.sign === signs_1.Signs.MINUS)
             return -1 * this.compareCore(a, b);
         return 1 * this.compareCore(a, b);
     };

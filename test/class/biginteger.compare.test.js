@@ -1,11 +1,6 @@
 const { expect } = require('chai');
 const { BigInteger } = require('../../dist/class/biginteger');
 
-let bigInteger;
-
-const PLUS = '+';
-const MINUS = '-';
-
 describe('BigInteger class tests', () => {
     it('Should compare two negative numbers of same length correct', () => {
         const ersteNummer = new BigInteger('-374917348781374');
@@ -40,5 +35,12 @@ describe('BigInteger class tests', () => {
         const zweiteNummer = new BigInteger('0008');
         const result = ersteNummer.compare(zweiteNummer);
         expect(result).to.equal(1);
+    });
+
+    it('Should compare two integers of opposite signs correct', () => {
+        const ersteNummer = new BigInteger('-02948');
+        const zweiteNummer = new BigInteger('00193482');
+        const result = ersteNummer.compare(zweiteNummer);
+        expect(result).to.equal(-1);
     });
 });

@@ -1,5 +1,7 @@
-import { BigIntegerSum } from "./operations/sum";
+
 import { BigIntegerCompare } from "./operations/compare";
+import { Switch } from "./operations/switch";
+import { Signs } from "./signs";
 
 export class BigInteger {
 
@@ -23,7 +25,7 @@ export class BigInteger {
      * The private variables - These are mutables, and properties of the class
      * These are most probably to be changed within a constructor or by other methods
      */
-    private _sign: LocalEnums.Signs;
+    private _sign: Signs;
     private _signPresent: boolean = false;
     private _integer: String;
     private _zahlen: Array<number>;
@@ -32,7 +34,6 @@ export class BigInteger {
      * Constants from other class that have zero arguments
      * These are essentially operation arguments
      */
-    private _bigSum: BigIntegerSum = new BigIntegerSum();
     private _bigCompare: BigIntegerCompare = new BigIntegerCompare();
 
     /**
@@ -54,7 +55,7 @@ export class BigInteger {
      * @param number The qualified candidate for the BigInteger
      */
     private lookAheadSign(number: string): boolean {
-        if (number && (number.charAt(0) === LocalEnums.Signs.PLUS || number.charAt(0) === LocalEnums.Signs.MINUS)) return true;
+        if (number && (number.charAt(0) === Signs.PLUS || number.charAt(0) === Signs.MINUS)) return true;
         return false;
     }
 
@@ -62,9 +63,9 @@ export class BigInteger {
      * Method to get the sign of the BigInteger
      * @param candidate The qualified candidate for BigInteger
      */
-    private getSignumFrom(candidate: string): LocalEnums.Signs {
-        if (!candidate) return LocalEnums.Signs.NULL;
-        return candidate.charAt(0) === LocalEnums.Signs.MINUS ? LocalEnums.Signs.MINUS : LocalEnums.Signs.PLUS;
+    private getSignumFrom(candidate: string): Signs {
+        if (!candidate) return Signs.NULL;
+        return candidate.charAt(0) === Signs.MINUS ? Signs.MINUS : Signs.PLUS;
     }
 
     /**
@@ -76,7 +77,7 @@ export class BigInteger {
         while (number.charAt(idx) === BigInteger.ZERO) idx++;
         return BigInteger.NULL.concat(
             // The symbol probably
-            this._signPresent ? this._sign : LocalEnums.Signs.NULL,
+            this._signPresent ? this._sign : Signs.NULL,
             // The digits
             number.substr(idx),
             // What if it is zero
@@ -98,11 +99,17 @@ export class BigInteger {
      * @param addendum Another bigInteger
      */
     public add(addendum: BigInteger): BigInteger {
-        return this._bigSum.add(this, addendum);
+        return new Switch(this, addendum, 'ADD').router();
     }
 
     public compare(compareTerm: BigInteger): number {
         return this._bigCompare.compare(this, compareTerm);
+    }
+
+    public getAbsoluteInteger(): BigInteger {
+        if (this._integer === BigInteger.NULL) BigInteger.NULL;
+        let idx = this._signPresent ? 1 : 0;
+        return new BigInteger(this._integer.substr(idx));
     }
 
     /**
@@ -129,7 +136,7 @@ export class BigInteger {
     /**
      * Accessor methods
      */
-    public get sign(): LocalEnums.Signs {
+    public get sign(): Signs {
         return this._sign;
     }
 
@@ -139,16 +146,5 @@ export class BigInteger {
 
     public get zahlen(): Array<number> {
         return this._zahlen;
-    }
-}
-
-export namespace LocalEnums {
-    /**
-     * An enum to capture the possible value  of signs
-     */
-    export enum Signs {
-        PLUS = '+',
-        MINUS = '-',
-        NULL = ''
     }
 }
