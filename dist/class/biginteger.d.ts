@@ -23,11 +23,6 @@ export declare class BigInteger {
     private _integer;
     private _zahlen;
     /**
-     * Constants from other class that have zero arguments
-     * These are essentially operation arguments
-     */
-    private _bigCompare;
-    /**
      * Constructor
      * @param number The number as the nominee as the bigInteger
      */

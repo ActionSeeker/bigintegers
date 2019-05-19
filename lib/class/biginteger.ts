@@ -31,12 +31,6 @@ export class BigInteger {
     private _zahlen: Array<number>;
 
     /**
-     * Constants from other class that have zero arguments
-     * These are essentially operation arguments
-     */
-    private _bigCompare: BigIntegerCompare = new BigIntegerCompare();
-
-    /**
      * Constructor
      * @param number The number as the nominee as the bigInteger
      */
@@ -111,7 +105,7 @@ export class BigInteger {
     }
 
     public compare(compareTerm: BigInteger): number {
-        return this._bigCompare.compare(this, compareTerm);
+        return BigIntegerCompare.compare(this, compareTerm);
     }
 
     public getAbsoluteInteger(): BigInteger {

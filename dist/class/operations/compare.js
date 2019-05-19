@@ -12,7 +12,7 @@ var BigIntegerCompare = /** @class */ (function () {
      * @returns 0 if a == b
      * @returns 1 if a > b
      */
-    BigIntegerCompare.prototype.compare = function (a, b) {
+    BigIntegerCompare.compare = function (a, b) {
         // When a is negative and b is positive
         if (a.sign === signs_1.Signs.MINUS && b.sign === signs_1.Signs.PLUS)
             return -1;
@@ -28,10 +28,11 @@ var BigIntegerCompare = /** @class */ (function () {
             return comparator;
         }
         if (a.sign === signs_1.Signs.MINUS)
-            return -1 * this.compareCore(a, b);
-        return 1 * this.compareCore(a, b);
+            return -1 * this.compareCore({ a: a, b: b });
+        return 1 * this.compareCore({ a: a, b: b });
     };
-    BigIntegerCompare.prototype.compareCore = function (a, b) {
+    BigIntegerCompare.compareCore = function (_a) {
+        var a = _a.a, b = _a.b;
         var $idx = 0;
         var flag = false;
         do {

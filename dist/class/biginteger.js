@@ -16,11 +16,6 @@ var BigInteger = /** @class */ (function () {
          */
         this.REGEX = /(^[-|+]?[0-9]+$)/gm;
         this._signPresent = false;
-        /**
-         * Constants from other class that have zero arguments
-         * These are essentially operation arguments
-         */
-        this._bigCompare = new compare_1.BigIntegerCompare();
         if (!this.REGEX.test(number)) {
             throw new Error('ParseException: The nominated candidate does not suit the rules for being an integer');
         }
@@ -87,7 +82,7 @@ var BigInteger = /** @class */ (function () {
         return new switch_1.Switch(this, addendum, 'MINUS').router();
     };
     BigInteger.prototype.compare = function (compareTerm) {
-        return this._bigCompare.compare(this, compareTerm);
+        return compare_1.BigIntegerCompare.compare(this, compareTerm);
     };
     BigInteger.prototype.getAbsoluteInteger = function () {
         if (this._integer === BigInteger.NULL)

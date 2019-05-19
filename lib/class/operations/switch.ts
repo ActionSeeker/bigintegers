@@ -2,6 +2,7 @@ import { BigInteger } from "../biginteger";
 import { BigIntegerSum } from "./sum";
 import { BigIntegerDifference } from "./difference";
 import { Signs } from "../signs";
+import { BigIntegerCompare } from "./compare";
 
 const { PLUS, MINUS } = Signs
 
@@ -49,10 +50,16 @@ export class Switch {
     }
 
     private sorter(): BigInteger {
-        if (this._case === 1) return BigIntegerSum.add(this._a, this._b);
-        if (this._case === 2) return BigIntegerSum.add(this._a, this._b).negate(); // Multiply this with -1
-        if (this._case === 3) return BigIntegerDifference.minus(this._a, this._b);
-        if (this._case === 4) return BigIntegerDifference.minus(this._b, this._a).negate(); // Multiply this with -1
+
+        let bigger: BigInteger = this._a.getAbsoluteInteger();
+        let smaller: BigInteger = this._b.getAbsoluteInteger();
+
+        if (BigIntegerCompare.compare(bigger, smaller) === -1) [bigger, smaller] = [smaller, bigger];
+
+        if (this._case === 1) return BigIntegerSum.add(bigger, smaller);
+        if (this._case === 2) return BigIntegerSum.add(bigger, smaller).negate(); // Multiply this with -1
+        if (this._case === 3) return BigIntegerDifference.minus(bigger, smaller);
+        if (this._case === 4) return BigIntegerDifference.minus(bigger, smaller).negate(); // Multiply this with -1
         return new BigInteger('');
     }
 }

@@ -1,4 +1,6 @@
 import { BigInteger } from "../biginteger";
 export declare class BigIntegerDifference {
-    static minus(erste: BigInteger, zweite: BigInteger): BigInteger;
+    private static readonly ZERO;
+    private static readonly RADIX;
+    static minus(subtrahend: BigInteger, minuend: BigInteger): BigInteger;
 }

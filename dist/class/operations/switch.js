@@ -4,6 +4,7 @@ var biginteger_1 = require("../biginteger");
 var sum_1 = require("./sum");
 var difference_1 = require("./difference");
 var signs_1 = require("../signs");
+var compare_1 = require("./compare");
 var PLUS = signs_1.Signs.PLUS, MINUS = signs_1.Signs.MINUS;
 var Switch = /** @class */ (function () {
     function Switch(a, b, operation) {
@@ -39,14 +40,19 @@ var Switch = /** @class */ (function () {
         return this.sorter();
     };
     Switch.prototype.sorter = function () {
+        var _c;
+        var bigger = this._a.getAbsoluteInteger();
+        var smaller = this._b.getAbsoluteInteger();
+        if (compare_1.BigIntegerCompare.compare(bigger, smaller) === -1)
+            _c = [smaller, bigger], bigger = _c[0], smaller = _c[1];
         if (this._case === 1)
-            return sum_1.BigIntegerSum.add(this._a, this._b);
+            return sum_1.BigIntegerSum.add(bigger, smaller);
         if (this._case === 2)
-            return sum_1.BigIntegerSum.add(this._a, this._b).negate(); // Multiply this with -1
+            return sum_1.BigIntegerSum.add(bigger, smaller).negate(); // Multiply this with -1
         if (this._case === 3)
-            return difference_1.BigIntegerDifference.minus(this._a, this._b);
+            return difference_1.BigIntegerDifference.minus(bigger, smaller);
         if (this._case === 4)
-            return difference_1.BigIntegerDifference.minus(this._b, this._a).negate(); // Multiply this with -1
+            return difference_1.BigIntegerDifference.minus(bigger, smaller).negate(); // Multiply this with -1
         return new biginteger_1.BigInteger('');
     };
     return Switch;

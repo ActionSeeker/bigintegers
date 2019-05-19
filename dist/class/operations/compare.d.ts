@@ -8,6 +8,6 @@ export declare class BigIntegerCompare {
      * @returns 0 if a == b
      * @returns 1 if a > b
      */
-    compare(a: BigInteger, b: BigInteger): number;
-    private compareCore;
+    static compare(a: BigInteger, b: BigInteger): number;
+    private static compareCore;
 }

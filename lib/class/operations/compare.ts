@@ -11,7 +11,7 @@ export class BigIntegerCompare {
      * @returns 0 if a == b
      * @returns 1 if a > b
      */
-    public compare(a: BigInteger, b: BigInteger): number {
+    public static compare(a: BigInteger, b: BigInteger): number {
         // When a is negative and b is positive
         if (a.sign === Signs.MINUS && b.sign === Signs.PLUS) return -1;
         // When a is positive and b is negative
@@ -23,11 +23,11 @@ export class BigIntegerCompare {
             if (a.sign === Signs.MINUS) return -1 * comparator;
             return comparator;
         }
-        if (a.sign === Signs.MINUS) return -1 * this.compareCore(a, b);
-        return 1 * this.compareCore(a, b);
+        if (a.sign === Signs.MINUS) return -1 * this.compareCore({ a, b });
+        return 1 * this.compareCore({ a, b });
     }
 
-    private compareCore(a: BigInteger, b: BigInteger): number {
+    private static compareCore({ a, b }: { a: BigInteger; b: BigInteger; }): number {
         let $idx = 0;
         let flag = false;
         do {
