@@ -54,12 +54,23 @@ export class Switch {
         let bigger: BigInteger = this._a.getAbsoluteInteger();
         let smaller: BigInteger = this._b.getAbsoluteInteger();
 
-        if (BigIntegerCompare.compare(bigger, smaller) === -1) [bigger, smaller] = [smaller, bigger];
+        let swapped: Boolean = false;
+
+        if (BigIntegerCompare.compare(bigger, smaller) === -1) {
+            swapped = true;
+            [bigger, smaller] = [smaller, bigger];
+        }
 
         if (this._case === 1) return BigIntegerSum.add(bigger, smaller);
         if (this._case === 2) return BigIntegerSum.add(bigger, smaller).negate(); // Multiply this with -1
-        if (this._case === 3) return BigIntegerDifference.minus(bigger, smaller);
-        if (this._case === 4) return BigIntegerDifference.minus(bigger, smaller).negate(); // Multiply this with -1
+        if (this._case === 3) {
+            const basicResult: BigInteger = BigIntegerDifference.minus(bigger, smaller);
+            return swapped ? basicResult.negate() : basicResult;
+        }
+        if (this._case === 4) {
+            const basicResult: BigInteger = BigIntegerDifference.minus(bigger, smaller);
+            return swapped ? basicResult : basicResult.negate();
+        }
         return new BigInteger('');
     }
 }

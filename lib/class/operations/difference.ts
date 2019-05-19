@@ -14,11 +14,14 @@ export class BigIntegerDifference {
         while (lengthDiff--) { minuendNr.push(CONSTANTS.ZERO) };
 
         const diff: number[] = [];
+        let carryOver: Boolean = false;
         for (let idx = CONSTANTS.ZERO; idx < subtrahend.zahlen.length; idx++) {
-            if (subtrahendNr[idx] >= minuendNr[idx]) diff.push(subtrahendNr[idx] - minuendNr[idx]);
+            if (subtrahendNr[idx] >= minuendNr[idx]) {
+                diff.push(subtrahendNr[idx] - minuendNr[idx]);
+            }
             else {
                 diff.push(subtrahendNr[idx] - minuendNr[idx] + CONSTANTS.RADIX);
-                subtrahendNr[idx + 1] = ((subtrahendNr[idx + 1] + CONSTANTS.RADIX - CONSTANTS.UNITY) % CONSTANTS.RADIX);
+                subtrahendNr[idx + 1] = (subtrahendNr[idx + 1] - CONSTANTS.UNITY);
             }
         }
 

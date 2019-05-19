@@ -43,16 +43,23 @@ var Switch = /** @class */ (function () {
         var _c;
         var bigger = this._a.getAbsoluteInteger();
         var smaller = this._b.getAbsoluteInteger();
-        if (compare_1.BigIntegerCompare.compare(bigger, smaller) === -1)
+        var swapped = false;
+        if (compare_1.BigIntegerCompare.compare(bigger, smaller) === -1) {
+            swapped = true;
             _c = [smaller, bigger], bigger = _c[0], smaller = _c[1];
+        }
         if (this._case === 1)
             return sum_1.BigIntegerSum.add(bigger, smaller);
         if (this._case === 2)
             return sum_1.BigIntegerSum.add(bigger, smaller).negate(); // Multiply this with -1
-        if (this._case === 3)
-            return difference_1.BigIntegerDifference.minus(bigger, smaller);
-        if (this._case === 4)
-            return difference_1.BigIntegerDifference.minus(bigger, smaller).negate(); // Multiply this with -1
+        if (this._case === 3) {
+            var basicResult = difference_1.BigIntegerDifference.minus(bigger, smaller);
+            return swapped ? basicResult.negate() : basicResult;
+        }
+        if (this._case === 4) {
+            var basicResult = difference_1.BigIntegerDifference.minus(bigger, smaller);
+            return swapped ? basicResult : basicResult.negate();
+        }
         return new biginteger_1.BigInteger('');
     };
     return Switch;

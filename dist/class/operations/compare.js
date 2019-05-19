@@ -23,27 +23,33 @@ var BigIntegerCompare = /** @class */ (function () {
         // When both are negative and LEN(a) < LEN (b)
         if (a.zahlen.length !== b.zahlen.length) {
             var comparator = a.zahlen.length > b.zahlen.length ? 1 : -1;
-            if (a.sign === signs_1.Signs.MINUS)
-                return -1 * comparator;
-            return comparator;
+            return a.sign === signs_1.Signs.MINUS ? -1 * comparator : comparator;
         }
-        if (a.sign === signs_1.Signs.MINUS)
-            return -1 * this.compareCore({ a: a, b: b });
-        return 1 * this.compareCore({ a: a, b: b });
+        // If both have same lengths
+        return a.sign === signs_1.Signs.MINUS ? -1 * this.compareCore({ a: a, b: b }) : this.compareCore({ a: a, b: b });
     };
-    BigIntegerCompare.compareCore = function (_a) {
-        var a = _a.a, b = _a.b;
+    BigIntegerCompare.compareCore = function (_c) {
+        var a = _c.a, b = _c.b;
         var $idx = 0;
         var flag = false;
+        var halt = false;
+        var _a = a.zahlen.join('');
+        var _b = b.zahlen.join('');
         do {
-            if (a.zahlen[$idx] < b.zahlen[$idx]) {
+            if (_a[$idx] < _b[$idx]) {
+                flag = false;
+                halt = true;
+                break;
+            }
+            if (_a[$idx] > _b[$idx]) {
                 flag = true;
+                halt = true;
                 break;
             }
             $idx++;
         } while ($idx < a.zahlen.length);
-        if (flag)
-            return -1;
+        if (halt)
+            return flag ? 1 : -1;
         return 0;
     };
     return BigIntegerCompare;

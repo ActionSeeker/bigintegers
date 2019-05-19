@@ -20,21 +20,24 @@ export class BigIntegerCompare {
         // When both are negative and LEN(a) < LEN (b)
         if (a.zahlen.length !== b.zahlen.length) {
             const comparator = a.zahlen.length > b.zahlen.length ? 1 : -1;
-            if (a.sign === Signs.MINUS) return -1 * comparator;
-            return comparator;
+            return a.sign === Signs.MINUS ? -1 * comparator : comparator;
         }
-        if (a.sign === Signs.MINUS) return -1 * this.compareCore({ a, b });
-        return 1 * this.compareCore({ a, b });
+        // If both have same lengths
+        return a.sign === Signs.MINUS ? -1 * this.compareCore({ a, b }) : this.compareCore({ a, b });
     }
 
     private static compareCore({ a, b }: { a: BigInteger; b: BigInteger; }): number {
         let $idx = 0;
         let flag = false;
+        let halt = false;
+        const _a: String = a.zahlen.join('');
+        const _b: String = b.zahlen.join('');
         do {
-            if (a.zahlen[$idx] < b.zahlen[$idx]) { flag = true; break; }
+            if (_a[$idx] < _b[$idx]) { flag = false; halt = true; break; }
+            if (_a[$idx] > _b[$idx]) { flag = true; halt = true; break; }
             $idx++;
         } while ($idx < a.zahlen.length);
-        if (flag) return -1;
+        if (halt) return flag ? 1 : -1;
         return 0;
     }
 
