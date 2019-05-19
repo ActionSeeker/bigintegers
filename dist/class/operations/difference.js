@@ -20,23 +20,6 @@ var BigIntegerDifference = /** @class */ (function () {
             return chunkDiff % biginteger_1.BigInteger.BASAL;
         });
         return new biginteger_1.BigInteger(diffChunks.reverse().map(function (_number) { return _this.pad(_number); }).join(''));
-        // // Now reverse them
-        // let subtrahendNr = subtrahend.zahlen.reverse();
-        // let minuendNr = minuend.zahlen.reverse();
-        // // Now add these numbers
-        // let lengthDiff = subtrahend.zahlen.length - minuend.zahlen.length;
-        // while (lengthDiff--) { minuendNr.push(CONSTANTS.ZERO) };
-        // const diff: number[] = [];
-        // for (let idx = CONSTANTS.ZERO; idx < subtrahend.zahlen.length; idx++) {
-        //     if (subtrahendNr[idx] >= minuendNr[idx]) {
-        //         diff.push(subtrahendNr[idx] - minuendNr[idx]);
-        //     }
-        //     else {
-        //         diff.push(subtrahendNr[idx] - minuendNr[idx] + CONSTANTS.RADIX);
-        //         subtrahendNr[idx + 1] = (subtrahendNr[idx + 1] - CONSTANTS.UNITY);
-        //     }
-        // }
-        // return new BigInteger(diff.reverse().join(''));
     };
     BigIntegerDifference.pad = function (_number) {
         return Array(Math.max(biginteger_1.BigInteger.CHUNK_SIZE - String(_number).length + 1, 0)).join('0') + _number;

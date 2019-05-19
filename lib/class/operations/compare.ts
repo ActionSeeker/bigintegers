@@ -18,8 +18,8 @@ export class BigIntegerCompare {
         if (a.sign === Signs.PLUS && b.sign === Signs.MINUS) return 1;
         // Otherwise based on length
         // When both are negative and LEN(a) < LEN (b)
-        if (a.zahlen.length !== b.zahlen.length) {
-            const comparator = a.zahlen.length > b.zahlen.length ? 1 : -1;
+        if (a.chunks.length !== b.chunks.length) {
+            const comparator = a.chunks.length > b.chunks.length ? 1 : -1;
             return a.sign === Signs.MINUS ? -1 * comparator : comparator;
         }
         // If both have same lengths
@@ -27,16 +27,15 @@ export class BigIntegerCompare {
     }
 
     private static compareCore({ a, b }: { a: BigInteger; b: BigInteger; }): number {
-        let $idx = 0;
+        let $idx = a.chunks.length;
         let flag = false;
         let halt = false;
-        const _a: String = a.zahlen.join('');
-        const _b: String = b.zahlen.join('');
+        const _a: number[] = a.chunks;
+        const _b: number[] = b.chunks;
         do {
             if (_a[$idx] < _b[$idx]) { flag = false; halt = true; break; }
             if (_a[$idx] > _b[$idx]) { flag = true; halt = true; break; }
-            $idx++;
-        } while ($idx < a.zahlen.length);
+        } while ($idx--);
         if (halt) return flag ? 1 : -1;
         return 0;
     }

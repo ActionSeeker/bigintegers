@@ -21,8 +21,8 @@ var BigIntegerCompare = /** @class */ (function () {
             return 1;
         // Otherwise based on length
         // When both are negative and LEN(a) < LEN (b)
-        if (a.zahlen.length !== b.zahlen.length) {
-            var comparator = a.zahlen.length > b.zahlen.length ? 1 : -1;
+        if (a.chunks.length !== b.chunks.length) {
+            var comparator = a.chunks.length > b.chunks.length ? 1 : -1;
             return a.sign === signs_1.Signs.MINUS ? -1 * comparator : comparator;
         }
         // If both have same lengths
@@ -30,11 +30,11 @@ var BigIntegerCompare = /** @class */ (function () {
     };
     BigIntegerCompare.compareCore = function (_c) {
         var a = _c.a, b = _c.b;
-        var $idx = 0;
+        var $idx = a.chunks.length;
         var flag = false;
         var halt = false;
-        var _a = a.zahlen.join('');
-        var _b = b.zahlen.join('');
+        var _a = a.chunks;
+        var _b = b.chunks;
         do {
             if (_a[$idx] < _b[$idx]) {
                 flag = false;
@@ -46,8 +46,7 @@ var BigIntegerCompare = /** @class */ (function () {
                 halt = true;
                 break;
             }
-            $idx++;
-        } while ($idx < a.zahlen.length);
+        } while ($idx--);
         if (halt)
             return flag ? 1 : -1;
         return 0;
