@@ -14,7 +14,6 @@ export class BigIntegerDifference {
         while (lengthDiff--) { minuendNr.push(CONSTANTS.ZERO) };
 
         const diff: number[] = [];
-        let carryOver: Boolean = false;
         for (let idx = CONSTANTS.ZERO; idx < subtrahend.zahlen.length; idx++) {
             if (subtrahendNr[idx] >= minuendNr[idx]) {
                 diff.push(subtrahendNr[idx] - minuendNr[idx]);

@@ -16,7 +16,6 @@ var BigIntegerDifference = /** @class */ (function () {
         }
         ;
         var diff = [];
-        var carryOver = false;
         for (var idx = constants_1.CONSTANTS.ZERO; idx < subtrahend.zahlen.length; idx++) {
             if (subtrahendNr[idx] >= minuendNr[idx]) {
                 diff.push(subtrahendNr[idx] - minuendNr[idx]);

@@ -14,6 +14,7 @@ export declare class BigInteger {
      * And these are unmodifiable and thereby prefixed readonly
      */
     private readonly REGEX;
+    private readonly CHUNK_SIZE;
     /**
      * The private variables - These are mutables, and properties of the class
      * These are most probably to be changed within a constructor or by other methods
@@ -22,6 +23,7 @@ export declare class BigInteger {
     private _signPresent;
     private _integer;
     private _zahlen;
+    private _chunks;
     /**
      * Constructor
      * @param number The number as the nominee as the bigInteger
@@ -46,6 +48,11 @@ export declare class BigInteger {
      * Method to get a list of numbers from a BigInteger
      */
     private getZahlen;
+    /**
+     * Based on method prescribed by Justin Warkentin on Stack Overflow
+     * URI : https://stackoverflow.com/a/29202760
+     */
+    private getChunks;
     /**
      * Method to add two big integers
      * @param addendum Another bigInteger
@@ -78,4 +85,5 @@ export declare class BigInteger {
     readonly sign: Signs;
     readonly integer: String;
     readonly zahlen: Array<number>;
+    readonly chunks: Array<number>;
 }

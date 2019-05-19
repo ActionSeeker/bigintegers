@@ -20,6 +20,7 @@ export class BigInteger {
      * And these are unmodifiable and thereby prefixed readonly
      */
     private readonly REGEX: RegExp = /(^[-|+]?[0-9]+$)/gm;
+    private readonly CHUNK_SIZE: number = 4;
 
     /**
      * The private variables - These are mutables, and properties of the class
@@ -29,6 +30,7 @@ export class BigInteger {
     private _signPresent: boolean = false;
     private _integer: String;
     private _zahlen: Array<number>;
+    private _chunks: Array<number>;
 
     /**
      * Constructor
@@ -42,6 +44,7 @@ export class BigInteger {
         this._signPresent = this.lookAheadSign(number);
         this._integer = this.getSanitizedForm(number);
         this._zahlen = this.getZahlen();
+        this._chunks = this.getChunks();
     }
 
     /**
@@ -86,6 +89,26 @@ export class BigInteger {
         if (this._integer === BigInteger.NULL) return [];
         let idx = this._signPresent ? 1 : 0;
         return this._integer.substr(idx).split('').map((zahl: string) => parseInt(zahl));
+    }
+
+    /**
+     * Based on method prescribed by Justin Warkentin on Stack Overflow 
+     * URI : https://stackoverflow.com/a/29202760
+     */
+    private getChunks(): number[] {
+        if (this._integer === BigInteger.NULL) return [];
+        // First clean the list by removing any signs / symbols
+        let idx = this._signPresent ? 1 : 0;
+        const zahlen = this._integer.substr(idx);
+        // On the cleaned list
+        const size = Math.ceil(zahlen.length / this.CHUNK_SIZE);
+        const chunked = new Array(size);
+        let offset = zahlen.length;
+        for (let idx = 0; idx < size; idx++ , offset = offset - this.CHUNK_SIZE) {
+            const startLt = offset - this.CHUNK_SIZE > 0 ? offset - this.CHUNK_SIZE : 0;
+            chunked[idx] = parseInt(zahlen.substring(startLt, offset));
+        }
+        return chunked;
     }
 
     /**
@@ -158,4 +181,9 @@ export class BigInteger {
     public get zahlen(): Array<number> {
         return this._zahlen;
     }
+
+    public get chunks(): Array<number> {
+        return this._chunks;
+    }
+
 }

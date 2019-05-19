@@ -15,6 +15,7 @@ var BigInteger = /** @class */ (function () {
          * And these are unmodifiable and thereby prefixed readonly
          */
         this.REGEX = /(^[-|+]?[0-9]+$)/gm;
+        this.CHUNK_SIZE = 4;
         this._signPresent = false;
         if (!this.REGEX.test(number)) {
             throw new Error('ParseException: The nominated candidate does not suit the rules for being an integer');
@@ -23,6 +24,7 @@ var BigInteger = /** @class */ (function () {
         this._signPresent = this.lookAheadSign(number);
         this._integer = this.getSanitizedForm(number);
         this._zahlen = this.getZahlen();
+        this._chunks = this.getChunks();
     }
     /**
      * Method to look ahead if there's any symbol present in the
@@ -66,6 +68,26 @@ var BigInteger = /** @class */ (function () {
             return [];
         var idx = this._signPresent ? 1 : 0;
         return this._integer.substr(idx).split('').map(function (zahl) { return parseInt(zahl); });
+    };
+    /**
+     * Based on method prescribed by Justin Warkentin on Stack Overflow
+     * URI : https://stackoverflow.com/a/29202760
+     */
+    BigInteger.prototype.getChunks = function () {
+        if (this._integer === BigInteger.NULL)
+            return [];
+        // First clean the list by removing any signs / symbols
+        var idx = this._signPresent ? 1 : 0;
+        var zahlen = this._integer.substr(idx);
+        // On the cleaned list
+        var size = Math.ceil(zahlen.length / this.CHUNK_SIZE);
+        var chunked = new Array(size);
+        var offset = zahlen.length;
+        for (var idx_1 = 0; idx_1 < size; idx_1++, offset = offset - this.CHUNK_SIZE) {
+            var startLt = offset - this.CHUNK_SIZE > 0 ? offset - this.CHUNK_SIZE : 0;
+            chunked[idx_1] = parseInt(zahlen.substring(startLt, offset));
+        }
+        return chunked;
     };
     /**
      * Method to add two big integers
@@ -136,6 +158,13 @@ var BigInteger = /** @class */ (function () {
     Object.defineProperty(BigInteger.prototype, "zahlen", {
         get: function () {
             return this._zahlen;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BigInteger.prototype, "chunks", {
+        get: function () {
+            return this._chunks;
         },
         enumerable: true,
         configurable: true
