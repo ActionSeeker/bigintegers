@@ -1,5 +1,5 @@
-export enum Signs {
-    PLUS = '+',
-    MINUS = '-',
-    NULL = ''
+export enum Signum {
+  PLUS = "+",
+  MINUS = "-",
+  NULL = "",
 }

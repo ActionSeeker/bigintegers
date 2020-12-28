@@ -1,193 +1,80 @@
-
-import { BigIntegerCompare } from "./operations/compare";
-import { Switch } from "./operations/switch";
-import { Signs } from "./signs";
+// import { BigIntegerCompare } from "./operations/compare";
+// import { Switch } from "./operations/switch";
+import { Signum } from "./signs";
 
 export class BigInteger {
+  private readonly REGEX: RegExp = /(^[-|+]?[0-9]+$)/;
+  /**
+   * Was brauchen wir, wenn wir eine große Zahl beschreiben sollen ?
+   * Dafür brauchen wir noch ein Array, ins wir
+   * einfach die eigentlichen Ziffern legen können
+   *
+   * What do we need when we need to describe a big number ?
+   * We need an array in which we can put the individual digits
+   */
+  private _digits: Array<number>;
+  private _sign: Signum;
 
+  constructor(bignumber: string) {
+    if (!this.REGEX.test(bignumber)) {
+      // nen Fehler werfen
+      throw new Error(
+        "The given format is incorrect and the number is rejected"
+      );
+    }
+    this._sign = this.extractSignum(bignumber);
+    this._digits = this.extractDigits(bignumber);
+  }
+
+  /**
+   * Return the sign of the number
+   * @param bignumber string
+   */
+  private extractSignum(bignumber: string): Signum {
     /**
-     * Static variables - these do not need the class to be initialized to be accessed
-     * NULL : sentinel value. If nothing is provided, a BigInteger is this
-     * ZERO : The zero of integers. A zero and null are not the same values
-     * CHUNKS_SIZE: Maximum exact integral value is 2**51 - 1, aka 9007199254740991
-     * It is safe because we don't use any bitwise sift operators here
-     * If we were to use those, then BASAL changes to 2147483647 aka 2**31 - 1
+     * Wir begehen das erste Zeichnen des eingegebenen Strings
+     * We inspect the first symbol of the input string
      */
-    private static readonly NULL: string = '';
-    private static readonly ZERO: string = '0';
-    private static readonly ONE: string = '1';
-    public static readonly CHUNK_SIZE: number = 15;
-    public static readonly BASAL: number = Math.pow(10, 15); // 10^15
+    if (!bignumber) return Signum.NULL; // Eine Ausnahme : Mir bin ich nicht so sicher, wenn wir ihr begegnen werden
+    return bignumber.charAt(0) === Signum.MINUS ? Signum.MINUS : Signum.PLUS;
+  }
 
+  /**
+   * Return the number cleaned and arranged as a list
+   * @param bignumber string
+   */
+  private extractDigits(bignumber: string): Array<number> {
     /**
-     * Constants - These are constants which are used for sanity purposes
-     * These are intended to be internal for now as we do not wish these to be publically available
-     * And these are unmodifiable and thereby prefixed readonly
+     * Zuerst müssen wir die Form der Zahl aufräumen
+     * Das heißt dass wir einfach die führenden Nullen wegmachen sollen
      */
-    private readonly REGEX: RegExp = /(^[-|+]?[0-9]+$)/gm;
-
-    /**
-     * The private variables - These are mutables, and properties of the class
-     * These are most probably to be changed within a constructor or by other methods
-     */
-    private _sign: Signs;
-    private _signPresent: boolean = false;
-    private _integer: String;
-    private _zahlen: Array<number>;
-    private _chunks: Array<number>;
-
-    /**
-     * Constructor
-     * @param number The number as the nominee as the bigInteger
-     */
-    constructor(number: string) {
-        if (!this.REGEX.test(number)) {
-            throw new Error('ParseException: The nominated candidate does not suit the rules for being an integer');
-        }
-        this._sign = this.getSignumFrom(number);
-        this._signPresent = this.lookAheadSign(number);
-        this._integer = this.getSanitizedForm(number);
-        this._zahlen = this.getZahlen();
-        this._chunks = this.getChunks();
+    let _bignumber: string = `${bignumber}`;
+    let _numericalIdx = 0;
+    let _lookahead = true;
+    let _digits = [];
+    if (
+      _bignumber.charAt(0) === Signum.MINUS ||
+      _bignumber.charAt(0) === Signum.PLUS
+    ) {
+      _numericalIdx = 1;
     }
-
-    /**
-     * Method to look ahead if there's any symbol present in the 
-     * @param number The qualified candidate for the BigInteger
-     */
-    private lookAheadSign(number: string): boolean {
-        if (number && (number.charAt(0) === Signs.PLUS || number.charAt(0) === Signs.MINUS)) return true;
-        return false;
+    for (let idx = _numericalIdx; idx < _bignumber.length; idx++) {
+      let _digit = parseInt(_bignumber[idx]);
+      if (!_digit && _lookahead) continue;
+      _digits.push(_digit);
+      /**
+       * Damit sollte es nur einmal stattfinden
+       * With this, it should happen only once
+       */
+      if (_lookahead) _lookahead = false;
     }
+    return _digits;
+  }
 
-    /**
-     * Method to get the sign of the BigInteger
-     * @param candidate The qualified candidate for BigInteger
-     */
-    private getSignumFrom(candidate: string): Signs {
-        if (!candidate) return Signs.NULL;
-        return candidate.charAt(0) === Signs.MINUS ? Signs.MINUS : Signs.PLUS;
-    }
-
-    /**
-     * Method to sanitize the argument and remove all prefixed zeroes
-     * @param number The qualified nominee for bigInteger
-     */
-    private getSanitizedForm(number: string): string {
-        let idx = this._signPresent ? 1 : 0;
-        while (number.charAt(idx) === BigInteger.ZERO) idx++;
-        return BigInteger.NULL.concat(
-            // The symbol probably
-            this._signPresent ? this._sign : Signs.NULL,
-            // The digits
-            number.substr(idx),
-            // What if it is zero
-            idx === number.length ? BigInteger.ZERO : BigInteger.NULL
-        )
-    }
-
-    /**
-     * Method to get a list of numbers from a BigInteger
-     */
-    private getZahlen(): number[] {
-        if (this._integer === BigInteger.NULL) return [];
-        let idx = this._signPresent ? 1 : 0;
-        return this._integer.substr(idx).split('').map((zahl: string) => parseInt(zahl));
-    }
-
-    /**
-     * Based on method prescribed by Justin Warkentin on Stack Overflow 
-     * URI : https://stackoverflow.com/a/29202760
-     */
-    private getChunks(): number[] {
-        if (this._integer === BigInteger.NULL) return [];
-        // First clean the list by removing any signs / symbols
-        let idx = this._signPresent ? 1 : 0;
-        const zahlen = this._integer.substr(idx);
-        // On the cleaned list
-        const size = Math.ceil(zahlen.length / BigInteger.CHUNK_SIZE);
-        const chunked = new Array(size);
-        let offset = zahlen.length;
-        for (let idx = 0; idx < size; idx++ , offset = offset - BigInteger.CHUNK_SIZE) {
-            const startLt = offset - BigInteger.CHUNK_SIZE > 0 ? offset - BigInteger.CHUNK_SIZE : 0;
-            chunked[idx] = parseInt(zahlen.substring(startLt, offset));
-        }
-        return chunked;
-    }
-
-    /**
-     * Method to add two big integers
-     * @param addendum Another bigInteger
-     */
-    public add(addendum: BigInteger): BigInteger {
-        return new Switch(this, addendum, 'ADD').router();
-    }
-
-    /**
-     * Method to add two big integers
-     * @param addendum Another bigInteger
-     */
-    public minus(addendum: BigInteger): BigInteger {
-        return new Switch(this, addendum, 'MINUS').router();
-    }
-
-    public compare(compareTerm: BigInteger): number {
-        return BigIntegerCompare.compare(this, compareTerm);
-    }
-
-    public getAbsoluteInteger(): BigInteger {
-        if (this._integer === BigInteger.NULL) BigInteger.NULL;
-        let idx = this._signPresent ? 1 : 0;
-        return new BigInteger(this._integer.substr(idx));
-    }
-
-    /**
-     * Method to return if the BigInteger is ZERO or not
-     */
-    public isZero(): boolean {
-        return this._integer === BigInteger.ZERO;
-    }
-
-    /**
-     * Method to return if the BigInteger is ONE or not
-     */
-    public isUnity(): boolean {
-        return this._integer === BigInteger.ONE;
-    }
-
-    /**
-     * Method to return if the BigInteger is NULL or not
-     */
-    public isNull(): boolean {
-        return this._integer === BigInteger.NULL;
-    }
-
-    public negate(): BigInteger {
-        if (this._sign === Signs.MINUS) return this.getAbsoluteInteger();
-        return new BigInteger(`-${this.zahlen.join('')}`);
-    }
-
-    public toString(): String {
-        return `${this._signPresent ? this._sign : ''}${this.zahlen.join('')}`
-    }
-
-    /**
-     * Accessor methods
-     */
-    public get sign(): Signs {
-        return this._sign;
-    }
-
-    public get integer(): String {
-        return this._integer;
-    }
-
-    public get zahlen(): Array<number> {
-        return this._zahlen;
-    }
-
-    public get chunks(): Array<number> {
-        return this._chunks;
-    }
-
+  /**
+   * Public method to return the signum of the number
+   */
+  public getSignum(): Signum {
+    return this._sign;
+  }
 }

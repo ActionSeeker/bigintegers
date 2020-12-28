@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Signs;
-(function (Signs) {
-    Signs["PLUS"] = "+";
-    Signs["MINUS"] = "-";
-    Signs["NULL"] = "";
-})(Signs = exports.Signs || (exports.Signs = {}));
+exports.Signum = void 0;
+var Signum;
+(function (Signum) {
+    Signum["PLUS"] = "+";
+    Signum["MINUS"] = "-";
+    Signum["NULL"] = "";
+})(Signum = exports.Signum || (exports.Signum = {}));
