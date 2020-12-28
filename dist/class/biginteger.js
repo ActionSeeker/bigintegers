@@ -6,10 +6,11 @@ exports.BigInteger = void 0;
 var signs_1 = require("./signs");
 var BigInteger = /** @class */ (function () {
     function BigInteger(bignumber) {
+        this.ZERO = 0;
         this.REGEX = /(^[-|+]?[0-9]+$)/;
         if (!this.REGEX.test(bignumber)) {
-            // nen Fehler werfen
-            throw new Error("The given format is incorrect and the number is rejected");
+            // Einen Fehler werfen
+            throw new Error('Incorrect format entered');
         }
         this._sign = this.extractSignum(bignumber);
         this._digits = this.extractDigits(bignumber);
@@ -56,6 +57,13 @@ var BigInteger = /** @class */ (function () {
             if (_lookahead)
                 _lookahead = false;
         }
+        if (!_digits.length) {
+            /**
+             * Erstell hier einfach eine Null
+             * We create a null here
+             */
+            _digits.push(this.ZERO);
+        }
         return _digits;
     };
     /**
@@ -63,6 +71,14 @@ var BigInteger = /** @class */ (function () {
      */
     BigInteger.prototype.getSignum = function () {
         return this._sign;
+    };
+    /**
+     * Method to return the stored number in a cleaner form with correct sign
+     * Eine methode, um die gespeichrte Nummer in einer aufgeräumten Form mit dem richtigen Vorzeichnen zu geben
+     */
+    BigInteger.prototype.toString = function () {
+        var _sign = this._sign === signs_1.Signum.MINUS ? '-' : '';
+        return "" + _sign + this._digits.join('');
     };
     return BigInteger;
 }());

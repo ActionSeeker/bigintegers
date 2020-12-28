@@ -1,8 +1,9 @@
 // import { BigIntegerCompare } from "./operations/compare";
 // import { Switch } from "./operations/switch";
-import { Signum } from "./signs";
+import { Signum } from './signs';
 
 export class BigInteger {
+  private readonly ZERO: number = 0;
   private readonly REGEX: RegExp = /(^[-|+]?[0-9]+$)/;
   /**
    * Was brauchen wir, wenn wir eine große Zahl beschreiben sollen ?
@@ -17,10 +18,8 @@ export class BigInteger {
 
   constructor(bignumber: string) {
     if (!this.REGEX.test(bignumber)) {
-      // nen Fehler werfen
-      throw new Error(
-        "The given format is incorrect and the number is rejected"
-      );
+      // Einen Fehler werfen
+      throw new Error('Incorrect format entered');
     }
     this._sign = this.extractSignum(bignumber);
     this._digits = this.extractDigits(bignumber);
@@ -68,6 +67,13 @@ export class BigInteger {
        */
       if (_lookahead) _lookahead = false;
     }
+    if (!_digits.length) {
+      /**
+       * Erstell hier einfach eine Null
+       * We create a null here
+       */
+      _digits.push(this.ZERO);
+    }
     return _digits;
   }
 
@@ -76,5 +82,14 @@ export class BigInteger {
    */
   public getSignum(): Signum {
     return this._sign;
+  }
+
+  /**
+   * Method to return the stored number in a cleaner form with correct sign
+   * Eine methode, um die gespeichrte Nummer in einer aufgeräumten Form mit dem richtigen Vorzeichnen zu geben
+   */
+  public toString(): string {
+    let _sign = this._sign === Signum.MINUS ? '-' : '';
+    return `${_sign}${this._digits.join('')}`;
   }
 }

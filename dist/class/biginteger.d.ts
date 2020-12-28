@@ -1,5 +1,6 @@
-import { Signum } from "./signs";
+import { Signum } from './signs';
 export declare class BigInteger {
+    private readonly ZERO;
     private readonly REGEX;
     /**
      * Was brauchen wir, wenn wir eine große Zahl beschreiben sollen ?
@@ -26,4 +27,9 @@ export declare class BigInteger {
      * Public method to return the signum of the number
      */
     getSignum(): Signum;
+    /**
+     * Method to return the stored number in a cleaner form with correct sign
+     * Eine methode, um die gespeichrte Nummer in einer aufgeräumten Form mit dem richtigen Vorzeichnen zu geben
+     */
+    toString(): string;
 }
