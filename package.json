@@ -6,7 +6,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "mocha --reporter spec test/**/*.test.js",
+    "test": "npm run build && mocha --reporter spec test/**/*.test.js",
     "dev": "npm run build && npm run test",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha test/**/*.test.js -- -R spec"
   },
@@ -34,5 +34,8 @@
     "istanbul": "^0.4.5",
     "mocha": "^6.1.4",
     "typescript": "^3.4.5"
+  },
+  "prettier": {
+    "singleQuote": true
   }
 }
