@@ -1,95 +1,113 @@
 // import { BigIntegerCompare } from "./operations/compare";
 // import { Switch } from "./operations/switch";
-import { Signum } from './signs';
+import { Signum } from './constants/signs';
+import Errors from './constants/errors';
 
 export class BigInteger {
   private readonly ZERO: number = 0;
   private readonly REGEX: RegExp = /(^[-|+]?[0-9]+$)/;
   /**
-   * Was brauchen wir, wenn wir eine große Zahl beschreiben sollen ?
-   * Dafür brauchen wir noch ein Array, ins wir
-   * einfach die eigentlichen Ziffern legen können
+   * What do we require to be able to describe a big number?
+   * Basically an array in which we can place every digit of it.
    *
-   * What do we need when we need to describe a big number ?
-   * We need an array in which we can put the individual digits
+   * Was benötigen wir um eine riesige Nummer beschreiben zu können?
+   * Eigentlich ein Array, in das wir jede Ziffer deren setzen können.
    */
+  private _original: string;
   private _digits: Array<number>;
   private _sign: Signum;
 
-  constructor(bignumber: string) {
-    if (!this.REGEX.test(bignumber)) {
-      // Einen Fehler werfen
-      throw new Error('Incorrect format entered');
+  /**
+   * Some more properties for quicker comparisions
+   * Ein paar mehrere Eigenschaften zu schnelleren Vergleichen
+   */
+  private _isNegative: boolean = false;
+  private _isEven = false;
+
+  constructor(candidate: string) {
+    if (!this.REGEX.test(candidate)) {
+      /**
+       * An error is encountered
+       * Es ist ein Fehler aufgetreten
+       */
+      throw new Error(Errors.FORMAT_INCORRECT);
     }
-    this._sign = this.extractSignum(bignumber);
-    this._digits = this.extractDigits(bignumber);
+    // What to do in a default case when we want to have a big integer with no input?
+    this._original = candidate; // Save the original
+
+    // Set the sign and negativity here
+    this._sign = this._extractSign();
+    if (this._sign === Signum.MINUS) this._isNegative = true;
+
+    this._digits = this._extractDigits();
+    this._isEven = this._digits[this._digits.length] % 2 === 0;
   }
 
   /**
    * Return the sign of the number
-   * @param bignumber string
    */
-  private extractSignum(bignumber: string): Signum {
+  private _extractSign(): Signum {
     /**
-     * Wir begehen das erste Zeichnen des eingegebenen Strings
-     * We inspect the first symbol of the input string
+     * Here the sign of the huge number entered is returned after an examination
+     * Hier wird das Signum der riesigen eingegebenen Nummer nach einer einfachen Untersuchung zurückgeworfen
      */
-    if (!bignumber) return Signum.NULL; // Eine Ausnahme : Mir bin ich nicht so sicher, wenn wir ihr begegnen werden
-    return bignumber.charAt(0) === Signum.MINUS ? Signum.MINUS : Signum.PLUS;
+    if (!this._original) return Signum.NULL;
+    return this._original.charAt(0) === Signum.MINUS
+      ? Signum.MINUS
+      : Signum.PLUS;
   }
 
   /**
    * Return the number cleaned and arranged as a list
-   * @param bignumber string
    */
-  private extractDigits(bignumber: string): Array<number> {
+  private _extractDigits(): Array<number> {
+    let digits: Array<number> = [];
+    let leading: boolean = true;
     /**
-     * Zuerst müssen wir die Form der Zahl aufräumen
-     * Das heißt dass wir einfach die führenden Nullen wegmachen sollen
+     * A bit of cleanup: remove the leading zeroes :D
+     * Ein bisschen Aufräumung: Einfach weg mit den führenden Nullen :D
      */
-    let _bignumber: string = `${bignumber}`;
-    let _numericalIdx = 0;
-    let _lookahead = true;
-    let _digits = [];
-    if (
-      _bignumber.charAt(0) === Signum.MINUS ||
-      _bignumber.charAt(0) === Signum.PLUS
-    ) {
-      _numericalIdx = 1;
+    for (let $idx = 0; $idx < this._original.length; $idx++) {
+      let char: string = this._original[$idx];
+      if (!/[0-9]/.test(char)) continue;
+      let digit = parseInt(char, 10);
+      if (digit !== 0) leading = false;
+      else if (!digit && !leading) leading = false;
+      if (leading) continue;
+      digits.push(digit);
     }
-    for (let idx = _numericalIdx; idx < _bignumber.length; idx++) {
-      let _digit = parseInt(_bignumber[idx]);
-      if (!_digit && _lookahead) continue;
-      _digits.push(_digit);
-      /**
-       * Damit sollte es nur einmal stattfinden
-       * With this, it should happen only once
-       */
-      if (_lookahead) _lookahead = false;
-    }
-    if (!_digits.length) {
-      /**
-       * Erstell hier einfach eine Null
-       * We create a null here
-       */
-      _digits.push(this.ZERO);
-    }
-    return _digits;
+
+    if (!digits.length) digits.push(this.ZERO);
+    return digits;
   }
 
   /**
    * Public method to return the signum of the number
    */
-  public getSignum(): Signum {
+  public getSign(): Signum {
     return this._sign;
   }
 
   /**
+   * Public method to return whether the number is negative
+   */
+  public isNegative(): boolean {
+    return this._isNegative;
+  }
+
+  /**
+   * Public method to return whether the number is even
+   */
+  public isEven(): boolean {
+    return this._isEven;
+  }
+
+  /**
    * Method to return the stored number in a cleaner form with correct sign
-   * Eine methode, um die gespeichrte Nummer in einer aufgeräumten Form mit dem richtigen Vorzeichnen zu geben
    */
   public toString(): string {
-    let _sign = this._sign === Signum.MINUS ? '-' : '';
-    return `${_sign}${this._digits.join('')}`;
+    let sign = this._sign === Signum.MINUS ? '-' : '';
+    // With the cleaned up zeroes
+    return `${sign}${this._digits.join('')}`;
   }
 }

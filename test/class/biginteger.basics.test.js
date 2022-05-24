@@ -10,12 +10,12 @@ describe('Basic signum tests', () => {
     biginteger = new BigInteger(
       '-28413381298748916985691837598728375896297569'
     );
-    expect(biginteger.getSignum()).to.equal(MINUS);
+    expect(biginteger.getSign()).to.equal(MINUS);
   });
 
-  it('should determine the sign of a positive bigninteger correctly', () => {
+  it('should determine the sign of a positive bigninteger without a + symbol correctly', () => {
     biginteger = new BigInteger('23959884574790867904593829509230');
-    expect(biginteger.getSignum()).to.equal(PLUS);
+    expect(biginteger.getSign()).to.equal(PLUS);
   });
 
   it('should throw an error when the format of the biginteger is incorrect', () => {
@@ -28,11 +28,7 @@ describe('Basic signum tests', () => {
 
   it('should parse zero as a basic zero that we define', () => {
     biginteger = new BigInteger('000');
-    /**
-     * Derzeit weisen wir der Null ein Plus zu
-     * At the moment we assign a + sign to zero
-     */
-    expect(biginteger.getSignum()).to.equal(PLUS);
+    expect(biginteger.getSign()).to.equal(PLUS);
     expect(biginteger.toString()).to.equal('0');
   });
 
@@ -40,7 +36,7 @@ describe('Basic signum tests', () => {
     biginteger = new BigInteger(
       '-0090002358742837532353465634768974957297498600900000000'
     );
-    expect(biginteger.getSignum()).to.equal(MINUS);
+    expect(biginteger.getSign()).to.equal(MINUS);
     expect(biginteger.toString()).to.equal(
       '-90002358742837532353465634768974957297498600900000000'
     );
